@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_account_payment_form_inherit_gts" model="ir.ui.view">
+            <field name="name">account.payment.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <group position="after">
+                    <group invisible="context.get('active_model', False)">
+                        <group>
+                            <field name="selected_inv_total"/>
+                        </group>
+                        <group>
+                            <field name="balance"/>
+                        </group>
+                    </group>
+                    <notebook invisible="context.get('active_model', False)">
+                        <page>
+                            <separator string="Please enter amount in invoices to pay"
+                                       attrs="{'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))]}"/>
+                            <group>
+                                <field name="invoice_lines" nolabel="1" force_save="1"
+                                       attrs="{'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', 'not in', ('draft'))]}">
+                                    <tree string="Invoices" editable="bottom" create="0" delete="0">
+                                        <field name="partner_id" readonly="1"/>
+                                        <field name="invoice_id" readonly="1" force_save="1"/>
+                                        <field name="date_invoice" readonly="1" force_save="1"/>
+                                        <field name="currency_id" readonly="1"/>
+                                        <field name="amount_total" readonly="1" sum="amount_total" widget="monetary" force_save="1"/>
+                                        <field name="residual" readonly="1" sum="residual" widget="monetary" force_save="1"/>
+                                        <field name="amount" sum="amount" widget="monetary" required="1"/>
+                                        <field name="actual_amount" sum="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </group>
+            </field>
+        </record>
+
+    </data>
+</odoo>
